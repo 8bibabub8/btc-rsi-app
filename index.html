@@ -1,79 +1,311 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!doctype html>
+<html lang="de">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px 'Helvetica Neue'; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Menlo; -webkit-text-stroke: #000000}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Menlo; -webkit-text-stroke: #000000; min-height: 15.0px}
-    p.p4 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px 'Helvetica Neue'; -webkit-text-stroke: #000000; min-height: 15.0px}
-    span.s1 {font-kerning: none}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BTC RSI (Browser App)</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin: 20px; max-width: 1100px; }
+    header { display:flex; gap:16px; flex-wrap:wrap; align-items:end; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 14px; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    label { font-size: 14px; color:#222; display:flex; flex-direction:column; gap:6px; }
+    select, input, button { padding: 10px 12px; border-radius: 10px; border:1px solid #ccc; font-size: 14px; }
+    button { cursor:pointer; border:1px solid #222; background:#111; color:#fff; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+    .kpi { display:flex; gap:18px; flex-wrap:wrap; }
+    .kpi div { min-width: 210px; }
+    .muted { color:#666; font-size: 13px; }
+    .status { font-weight: 600; }
+    .status.ok { color:#0a7; }
+    .status.warn { color:#c60; }
+    .status.bad { color:#c00; }
+    canvas { width:100% !important; height:320px !important; }
+    .grid { display:grid; gap:14px; grid-template-columns: 1fr; }
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!doctype html&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;label&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>Intervall</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;select id="interval"&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span>&lt;option value="1m"&gt;1m&lt;/option&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span>&lt;option value="5m"&gt;5m&lt;/option&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span>&lt;option value="15m"&gt;15m&lt;/option&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span>&lt;option value="1h" selected&gt;1h&lt;/option&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span>&lt;option value="4h"&gt;4h&lt;/option&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span>&lt;option value="1d"&gt;1d&lt;/option&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/label&gt;</span></p>
-<p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;label&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>RSI-Periode</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="period" type="number" min="2" max="100" value="14" /&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/label&gt;</span></p>
-<p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;label&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>Kerzen (Limit)</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input id="limit" type="number" min="50" max="1000" value="300" /&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/label&gt;</span></p>
-<p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;button id="btnLoad"&gt;Laden&lt;/button&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;button id="btnAuto"&gt;Auto-Refresh: Aus&lt;/button&gt;</span></p>
-<p class="p2"><span class="s1">&lt;/div&gt;</span></p>
-<p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1">&lt;div class="kpi" style="margin-top:12px;"&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="muted"&gt;Letzter Preis&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="lastPrice" style="font-size:22px; font-weight:700;"&gt;–&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="muted"&gt;RSI&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="lastRSI" style="font-size:22px; font-weight:700;"&gt;–&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="muted"&gt;Signal&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="signal" class="status"&gt;–&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="muted"&gt;Letztes Update&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="updatedAt"&gt;–&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1">&lt;/div&gt;</span></p>
-<p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1">&lt;div id="err" class="muted" style="margin-top:10px; color:#b00;"&gt;&lt;/div&gt;</span></p>
-<p class="p4"><span class="s1"></span><br></p>
-<p class="p4"><span class="s1"></span><br></p>
-<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; font: 14.0px 'Helvetica Neue'; -webkit-text-stroke: #000000"><span class="s1"><b>Preis (Close)</b></span></h3>
-<p class="p2"><span class="s1">&lt;div class="card"&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;h3 style="margin:0 0 10px 0;"&gt;RSI&lt;/h3&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;canvas id="rsiChart"&gt;&lt;/canvas&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="muted" style="margin-top:10px;"&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span>Klassisch: RSI &amp;gt; 70 = überkauft, RSI &amp;lt; 30 = überverkauft (nur als Hinweis, keine Anlageberatung).</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1">&lt;/div&gt;</span></p>
-<p class="p4"><span class="s1"></span><br></p>
-<p class="p4"><span class="s1"></span><br></p>
-<p class="p4"><span class="s1"></span><br></p>
+  <h1>BTC RSI im Browser</h1>
+
+  <header class="card">
+    <div class="row">
+      <label>
+        Börse/Quelle
+        <select id="source">
+          <option value="binance" selected>Binance (BTCUSDT)</option>
+        </select>
+      </label>
+
+      <label>
+        Intervall
+        <select id="interval">
+          <option value="1m">1m</option>
+          <option value="5m">5m</option>
+          <option value="15m">15m</option>
+          <option value="1h" selected>1h</option>
+          <option value="4h">4h</option>
+          <option value="1d">1d</option>
+        </select>
+      </label>
+
+      <label>
+        RSI-Periode
+        <input id="period" type="number" min="2" max="100" value="14" />
+      </label>
+
+      <label>
+        Kerzen (Limit)
+        <input id="limit" type="number" min="50" max="1000" value="300" />
+      </label>
+
+      <button id="btnLoad">Laden</button>
+      <button id="btnAuto">Auto-Refresh: Aus</button>
+    </div>
+
+    <div class="kpi" style="margin-top:12px;">
+      <div>
+        <div class="muted">Letzter Preis</div>
+        <div id="lastPrice" style="font-size:22px; font-weight:700;">–</div>
+      </div>
+      <div>
+        <div class="muted">RSI</div>
+        <div id="lastRSI" style="font-size:22px; font-weight:700;">–</div>
+      </div>
+      <div>
+        <div class="muted">Signal</div>
+        <div id="signal" class="status">–</div>
+      </div>
+      <div>
+        <div class="muted">Letztes Update</div>
+        <div id="updatedAt">–</div>
+      </div>
+    </div>
+
+    <div id="err" class="muted" style="margin-top:10px; color:#b00;"></div>
+  </header>
+
+  <div class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h3 style="margin:0 0 10px 0;">Preis (Close)</h3>
+      <canvas id="priceChart"></canvas>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px 0;">RSI</h3>
+      <canvas id="rsiChart"></canvas>
+      <div class="muted" style="margin-top:10px;">
+        Klassisch: RSI &gt; 70 = überkauft, RSI &lt; 30 = überverkauft (nur als Hinweis, keine Anlageberatung).
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    const els = {
+      interval: document.getElementById('interval'),
+      period: document.getElementById('period'),
+      limit: document.getElementById('limit'),
+      btnLoad: document.getElementById('btnLoad'),
+      btnAuto: document.getElementById('btnAuto'),
+      lastPrice: document.getElementById('lastPrice'),
+      lastRSI: document.getElementById('lastRSI'),
+      signal: document.getElementById('signal'),
+      updatedAt: document.getElementById('updatedAt'),
+      err: document.getElementById('err'),
+    };
+
+    let priceChart, rsiChart;
+    let autoTimer = null;
+
+    function fmtNum(n, digits=2) {
+      if (n === null || n === undefined || Number.isNaN(n)) return '–';
+      return Number(n).toLocaleString('de-DE', { maximumFractionDigits: digits, minimumFractionDigits: digits });
+    }
+
+    // Wilder RSI (EMA-ähnliches Glätten der Gewinne/Verluste)
+    function computeRSI(closes, period = 14) {
+      if (!Array.isArray(closes) || closes.length < period + 1) return [];
+
+      const rsi = Array(closes.length).fill(null);
+
+      // initial average gain/loss
+      let gain = 0, loss = 0;
+      for (let i = 1; i <= period; i++) {
+        const diff = closes[i] - closes[i - 1];
+        if (diff >= 0) gain += diff;
+        else loss += -diff;
+      }
+      let avgGain = gain / period;
+      let avgLoss = loss / period;
+
+      // first RSI value at index = period
+      let rs = avgLoss === 0 ? Infinity : (avgGain / avgLoss);
+      rsi[period] = 100 - (100 / (1 + rs));
+
+      // subsequent values
+      for (let i = period + 1; i < closes.length; i++) {
+        const diff = closes[i] - closes[i - 1];
+        const g = diff > 0 ? diff : 0;
+        const l = diff < 0 ? -diff : 0;
+
+        avgGain = (avgGain * (period - 1) + g) / period;
+        avgLoss = (avgLoss * (period - 1) + l) / period;
+
+        rs = avgLoss === 0 ? Infinity : (avgGain / avgLoss);
+        rsi[i] = 100 - (100 / (1 + rs));
+      }
+
+      return rsi;
+    }
+
+    function classifyRSI(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return { text: '–', cls: '' };
+      if (value >= 70) return { text: 'Überkauft (≥ 70)', cls: 'warn' };
+      if (value <= 30) return { text: 'Überverkauft (≤ 30)', cls: 'bad' };
+      return { text: 'Neutral', cls: 'ok' };
+    }
+
+    function ensureCharts() {
+      const priceCtx = document.getElementById('priceChart');
+      const rsiCtx = document.getElementById('rsiChart');
+
+      if (!priceChart) {
+        priceChart = new Chart(priceCtx, {
+          type: 'line',
+          data: { labels: [], datasets: [{ label: 'BTC Close', data: [], pointRadius: 0, borderWidth: 2 }] },
+          options: {
+            responsive: true,
+            animation: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { legend: { display: true } },
+            scales: {
+              x: { ticks: { maxTicksLimit: 10 } },
+              y: { beginAtZero: false }
+            }
+          }
+        });
+      }
+
+      if (!rsiChart) {
+        rsiChart = new Chart(rsiCtx, {
+          type: 'line',
+          data: {
+            labels: [],
+            datasets: [
+              { label: 'RSI', data: [], pointRadius: 0, borderWidth: 2 },
+              // Linien bei 70/30 (als Datenreihen)
+              { label: '70', data: [], pointRadius: 0, borderWidth: 1 },
+              { label: '30', data: [], pointRadius: 0, borderWidth: 1 },
+            ]
+          },
+          options: {
+            responsive: true,
+            animation: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { legend: { display: true } },
+            scales: {
+              x: { ticks: { maxTicksLimit: 10 } },
+              y: { min: 0, max: 100 }
+            }
+          }
+        });
+      }
+    }
+
+    async function fetchBinanceKlines(interval, limit) {
+      // Binance public endpoint
+      const url = new URL('https://api.binance.com/api/v3/klines');
+      url.searchParams.set('symbol', 'BTCUSDT');
+      url.searchParams.set('interval', interval);
+      url.searchParams.set('limit', String(limit));
+
+      const res = await fetch(url.toString());
+      if (!res.ok) throw new Error(`Binance API Fehler: ${res.status} ${res.statusText}`);
+      return await res.json();
+    }
+
+    function toLabel(tsMs, interval) {
+      const d = new Date(tsMs);
+      // grob je nach timeframe; schlicht halten
+      if (interval.endsWith('m') || interval.endsWith('h')) {
+        return d.toLocaleString('de-DE', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+      }
+      return d.toLocaleDateString('de-DE', { year:'2-digit', month:'2-digit', day:'2-digit' });
+    }
+
+    async function load() {
+      els.err.textContent = '';
+      els.btnLoad.disabled = true;
+
+      try {
+        const interval = els.interval.value;
+        const period = Math.max(2, Math.min(100, parseInt(els.period.value, 10) || 14));
+        const limit = Math.max(50, Math.min(1000, parseInt(els.limit.value, 10) || 300));
+
+        const raw = await fetchBinanceKlines(interval, limit);
+
+        // Kline schema: [ openTime, open, high, low, close, volume, closeTime, ... ]
+        const times = raw.map(k => Number(k[0]));
+        const closes = raw.map(k => Number(k[4]));
+        const labels = times.map(t => toLabel(t, interval));
+
+        const rsi = computeRSI(closes, period);
+
+        ensureCharts();
+
+        // Update KPIs
+        const lastClose = closes[closes.length - 1];
+        const lastRsi = rsi[rsi.length - 1];
+
+        els.lastPrice.textContent = fmtNum(lastClose, 2) + ' USDT';
+        els.lastRSI.textContent = (lastRsi == null ? '–' : fmtNum(lastRsi, 2));
+        const sig = classifyRSI(lastRsi);
+        els.signal.textContent = sig.text;
+        els.signal.className = 'status ' + (sig.cls || '');
+        els.updatedAt.textContent = new Date().toLocaleString('de-DE');
+
+        // Price chart
+        priceChart.data.labels = labels;
+        priceChart.data.datasets[0].data = closes;
+        priceChart.update();
+
+        // RSI chart (inkl. 70/30 Linien)
+        rsiChart.data.labels = labels;
+        rsiChart.data.datasets[0].data = rsi;
+        rsiChart.data.datasets[1].data = labels.map(_ => 70);
+        rsiChart.data.datasets[2].data = labels.map(_ => 30);
+        rsiChart.update();
+
+      } catch (e) {
+        els.err.textContent = String(e?.message || e);
+      } finally {
+        els.btnLoad.disabled = false;
+      }
+    }
+
+    function toggleAuto() {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+        els.btnAuto.textContent = 'Auto-Refresh: Aus';
+        return;
+      }
+      // alle 30s aktualisieren
+      autoTimer = setInterval(load, 30_000);
+      els.btnAuto.textContent = 'Auto-Refresh: An (30s)';
+      load();
+    }
+
+    els.btnLoad.addEventListener('click', load);
+    els.btnAuto.addEventListener('click', toggleAuto);
+
+    // initial
+    load();
+  </script>
 </body>
 </html>
